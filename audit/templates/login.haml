@@ -1,0 +1,44 @@
+- extends "base.html"
+
+- block content
+	%ul.tabs.clearfix
+		%li
+			%a{'href':'javascript:void(0)'} Login
+		%li
+			%a{'href':'javascript:void(0)'} Create Account
+	%div.tab-content
+		%div
+			%form{'id':'loginForm','name':'loginForm'}
+				%h1
+					Login
+				%fieldset
+					.error.bad-credentials Double check your username or password. 
+					%div.clearfix
+						%label{'for':'name'} Username
+						%input.username{'type': 'text', 'name': 'username', 'placeholder': 'Username'}
+						.error.blank-username Please enter your username
+					%div.clearfix
+						%label{'for':'password'} Password
+						%input.password{'type': 'password', 'name': 'password', 'placeholder': 'Password'}
+						.error.blank-password Please enter your password
+					%div.clearfix
+						%input{'type': 'submit', 'value': 'Log-in'}
+		%div
+			%form{'id':'createAccountForm','name':'createAccountForm'}
+				%h1
+					Create Account
+				%fieldset
+					%div.clearfix
+						%label{'for':'name'} Username
+						%input.username{'type': 'text', 'name': 'username', 'placeholder': 'Username'}
+						.error.blank-username Please enter your username
+					%div.clearfix
+						%label{'for':'password'} Password
+						%input.password{'type': 'password', 'name': 'password', 'placeholder': 'Password'}
+						.error.blank-password Please enter your password
+					%div.clearfix
+						%label{'for':'confirm_password'} Confirm Password
+						%input.confirm_password{'type': 'password', 'name': 'confirm_password', 'placeholder': 'Confirm Password'}
+						.error.blank-confirm_password Please enter your password
+					%div
+						%input{'type': 'submit', 'value': 'Log-in'}

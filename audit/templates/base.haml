@@ -1,0 +1,148 @@
+- load compress
+!!! 5
+%html
+	%head
+		%title
+			- block title
+		- compress css
+			%link{'href':'/static/css/base.less', 'type':'text/less','rel':'stylesheet'}
+			- block css
+	%body{'id': '{{ body_id }}'}
+		#container.container.notLoggedIn
+			%header.row
+				.span2
+					%span#logo	css-audit
+				#user-banner.offset6.span2
+					Logged in as <span class="user"></span>
+			%section#main-content.row
+				#page-content.span12
+				 - block content
+		%script#dashTemplate.template{'type': 'text/erb'}
+			%header.row-fluid
+				.span10
+					%h1
+						<%= entityName %>
+				.span2
+					%ul#switch-project.nav.nav-pills
+						%li.dropdown
+							%a.dropdown-toggle{'data-toggle':'dropdown'}
+								Switch Project
+								%span.caret
+							%ul.dropdown-menu
+								:plain
+									<% _.each(entities, function(entity) { %>
+								%li{'class':'project-<%= entity.id %>'}
+									%a{'href':'<%= entity.getUrl() %>/info'}
+										<%= entity.get('name') || 'untitled project' %>
+								:plain
+									<% }) %>
+								%li.new-project
+									%a{'href':'/projects/add'}
+										%i.icon-plus-sign
+										New Project
+			%nav#project-navigation.row-fluid
+				.span12
+					%ul.nav.nav-pills
+						%li.info
+							%a.own-handler{'href':'info'} Info
+						%li.paths
+							%a.own-handler{'href':'paths'} Paths
+						%li.sheets
+							%a.own-handler{'href':'sheets'} Stylesheets
+			%section#subpage-details.row-fluid
+		%script#projectInfoTemplate.template{'type': 'text/erb'}	
+			%form#projectInfo{'action':'#'}
+				.row-fluid.project-name
+					.span2
+						%label Project Name
+					.span3
+						%input{'type': 'text', 'value': '<%= project.get("name") %>', 'placeholder': 'untitled project'}
+					.span3
+						Give your project a good title.
+				.row-fluid.project-url
+					.span2
+						%label Url
+					.span3
+						%input{'type': 'text', 'value': '<%= project.get("url") %>'}
+					.span3
+						%span.help-block The URL that we'll scan for CSS. You won't be able to change this after creating the project.
+				.row-fluid.save
+					.span12
+						%button.btn
+							<%= project.id ? "Update" : "Save" %>
+		%script#pathsNavigatorTemplate.template{'type': 'text/erb'}
+			.row-fluid
+				.span8
+					.pathsPaginator.pagination
+						%ul
+							%li
+								%a{'href': '/projects/<%= project %>/paths/<% print(currentPage == 1 ? numPages : parseInt(currentPage, 10) - 1) %>'}
+									&laquo;
+							:plain
+								<% for (var i = 1, ii = numPages + 1; i < ii; i++) { %>
+							%li{'class': '<% print(i == currentPage ? "active" : "") %>'}
+								%a{'href': '/projects/<%= project %>/paths/<%= i %>'}
+									<%= i %>
+							:plain
+								<% } %>
+							%li
+								%a{'href': '/projects/<%= project %>/paths/<% print(currentPage == numPages ? 1 : parseInt(currentPage, 10) + 1) %>'}
+									&raquo;
+					.pathsTableHolder
+					.pathsPaginator.pagination
+						%ul
+							%li
+								%a{'href': '/projects/<%= project %>/paths/<% print(currentPage == 1 ? numPages : parseInt(currentPage, 10) - 1) %>'}
+									&laquo;
+							:plain
+								<% for (var i = 1, ii = numPages + 1; i < ii; i++) { %>
+							%li{'class': '<% print(i == currentPage ? "active" : "") %>'}
+								%a{'href': '/projects/<%= project %>/paths/<%= i %>'}
+									<%= i %>
+							:plain
+								<% } %>
+							%li
+								%a{'href': '/projects/<%= project %>/paths/<% print(currentPage == numPages ? 1 : parseInt(currentPage, 10) + 1) %>'}
+									&raquo;
+				.span4
+					%h6
+						Paths in your Project
+					%p
+						These are the paths in your project. <strong>CSS Audit</strong> does its best to detect all the paths in your site, but you may need to add or delete some as necessary.
+		%script#pathDashTemplate.template{'type': 'text/erb'}
+			%header.row-fluid
+				.span12
+					%h2 <%= path.uri %>
+			%section.row-fluid
+				.span12
+					%table.table.table-bordered.table-striped.table-condensed
+						%thead
+							%tr
+								%th
+									Stylesheets
+									%a{'href':'#'}
+										%i.icon-question-sign.pull-right.icon-white
+						%tbody
+							:plain
+								<% _.each(path.sheets.models, function(sheet) { %>
+							%tr
+								%td
+									%a{'href':'/sheets/<%= sheet.id %>'}
+										<%= sheet.get('uri') %>
+							:plain
+								<% }) %>
+						%tfoot
+							%tr
+								%td
+									%i.icon-th-list
+									%a{'href':'/sheets'}
+										Browse Stylesheets
+		- compress js
+			%script{'src':'/static/js/contrib/jquery.js','type':'text/javascript'}
+			%script{'src':'/static/js/contrib/underscore.js','type':'text/javascript'}
+			%script{'src':'/static/js/contrib/backbone.js','type':'text/javascript'}
+			%script{'src':'/static/js/bootstrap-button.js','type':'text/javascript'}
+			%script{'src':'/static/js/bootstrap-dropdown.js','type':'text/javascript'}
+			%script{'src':'/static/js/architecture.coffee','type':'text/coffeescript'}
+			%script{'src':'/static/js/router.coffee','type':'text/coffeescript'}
+			%script{'src':'/static/js/base.coffee','type':'text/coffeescript'}
