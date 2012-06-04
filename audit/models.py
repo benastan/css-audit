@@ -10,11 +10,11 @@ from django.core.cache import cache
 from pyquery import PyQuery as pyQ
 from django.db.models.signals import post_save
 
-# Get absolute url from uri and base url.
-# 
-# In other words, determine if path is relative
-# or absolute, and return a path that can be
-# used to request a resource. 
+""" Get absolute url from uri and base url.
+
+    In other words, determine if path is relative
+    or absolute, and return a path that can be
+    used to request a resource."""
 def resolve_url(res, url):
 	http = res[0:4]
 	root = res[0:1]
@@ -29,21 +29,21 @@ def resolve_url(res, url):
 	else:
 		return url + '/' + res
 
-# WebProject model
-#
-# Represents a set of resources. By configuring
-# paths correctly, one can scan an entire web site
-# for CSS selectors.
+""" WebProject model
+
+   Represents a set of resources. By configuring
+   paths correctly, one can scan an entire web site
+   for CSS selectors."""
 class WebProject(models.Model):
 	url = models.TextField()
 	name = models.CharField(max_length=64)
 	user = models.ForeignKey(User)
 
-# Internet Resource
-#
-# Abstract class for retrieving the source
-# of resources them and storing them in the
-# local filesystem.
+""" Internet Resource
+
+    Abstract class for retrieving the source
+    of resources them and storing them in the
+    local filesystem."""
 class InternetResource(models.Model):
 	url = models.TextField(blank=False)
 	latest = models.CharField(max_length=10)
@@ -79,10 +79,10 @@ class InternetResource(models.Model):
 		source = handle.read()
 		return source
 
-# ApplicationPath
-#
-# Represents an HTML page. This page
-# is query-able via the PyQuery method.
+""" ApplicationPath
+
+    Represents an HTML page. This page
+    is query-able via the PyQuery method."""
 class ApplicationPath(InternetResource):
 	project = models.ForeignKey(WebProject, related_name="paths", blank=False)
 	user = models.ForeignKey(User, related_name="paths", blank=False)
@@ -143,11 +143,11 @@ class ApplicationPath(InternetResource):
 						path.user=user
 						path.save()
 
-# Stylesheet
-#
-# Represents a stylesheet within a web project.
-# Stylesheets are scanned and offer various 
-# stats (e.g. 
+""" Stylesheet
+
+    Represents a stylesheet within a web project.
+    Stylesheets are scanned and offer various 
+    stats."""
 class Stylesheet(InternetResource):
 	project = models.ForeignKey(WebProject, related_name="stylesheets")
 	paths = models.ManyToManyField(ApplicationPath, related_name="stylesheets")
